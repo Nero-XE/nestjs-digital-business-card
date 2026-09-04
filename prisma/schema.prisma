@@ -1,0 +1,69 @@
+generator client {
+  provider     = "prisma-client-js"
+}
+
+generator json {
+  provider  = "prisma-json-types-generator"
+  namespace = "PrismaJson"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SkillLevel {
+  BASE
+  MID
+  PRO
+
+  @@map("enum_skill_levels")
+}
+
+model Profile {
+  id          String       @id @default(uuid()) @db.Uuid
+  fullName    String       @map("full_name") @db.VarChar(255)
+  description String?      @db.Text
+  /// [ProfileLink[]]
+  links       Json         @default("[]")
+  /// [ProfileSkill[]]
+  skills      Json         @default("[]")
+  experiences Experience[] @relation("profile_experiences")
+  projects    Project[]    @relation("profile_projects")
+  createdAt   DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime     @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("profiles")
+}
+
+model Experience {
+  id           String    @id @default(uuid()) @db.Uuid
+  profileId    String    @map("profile_id") @db.Uuid
+  company      String    @db.VarChar(255)
+  position     String    @db.VarChar(255)
+  startedAt    DateTime  @map("started_at") @db.Date
+  endedAt      DateTime? @map("ended_at") @db.Date
+  achievements String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  profile Profile @relation("profile_experiences", fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("experiences")
+}
+
+model Project {
+  id          String   @id @default(uuid()) @db.Uuid
+  profileId   String   @map("profile_id") @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  /// [ProjectLink[]]
+  links       Json     @default("[]")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  profile Profile @relation("profile_projects", fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@map("projects")
+}
