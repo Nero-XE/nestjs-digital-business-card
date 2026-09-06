@@ -4,8 +4,8 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { ProfileModule } from './profile/profile.module.js';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ExperienceModule } from './experience/experience.module.js';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
       plugins: [ApolloServerPluginLandingPageLocalDefault()]
     }),
     PrismaModule,
-    ProfileModule,
+    ExperienceModule,
   ],
 })
 export class AppModule {}
