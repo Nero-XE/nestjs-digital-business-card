@@ -7,6 +7,7 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ExperienceModule } from './experience/experience.module.js';
 import { ProjectModule } from './project/project.module.js';
+import { ProfileModule } from './profile/profile.module.js';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProjectModule } from './project/project.module.js';
     PrismaModule,
     ExperienceModule,
     ProjectModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}
