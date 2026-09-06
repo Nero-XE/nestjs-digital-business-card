@@ -23,6 +23,21 @@ input CreateExperienceInput {
   startedAt: DateTime!
 }
 
+"""Входные данные для создания профиля"""
+input CreateProfileInput {
+  """Описание"""
+  description: String
+
+  """ФИО"""
+  fullName: String!
+
+  """Список профессиональных ресурсов"""
+  links: [ProfileLinkInput!]! = []
+
+  """Список навыков"""
+  skills: [ProfileSkillInput!]! = []
+}
+
 """Входные данные для создания записи проекта"""
 input CreateProjectInput {
   """Описание проекта"""
@@ -77,6 +92,9 @@ type Mutation {
   """Создание записи опыта работы"""
   createExperience(data: CreateExperienceInput!): ExperienceEntity!
 
+  """Создание записи профиля"""
+  createProfile(data: CreateProfileInput!): ProfileEntity!
+
   """Создание записи проекта"""
   createProject(data: CreateProjectInput!): ProjectEntity!
 
@@ -85,6 +103,12 @@ type Mutation {
     """ID записи (UUID v4)"""
     id: ID!
   ): ExperienceEntity!
+
+  """Удаление записи профиля"""
+  removeProfile(
+    """ID записи (UUID v4)"""
+    id: ID!
+  ): ProfileEntity!
 
   """Удаление записи проекта"""
   removeProject(
@@ -95,8 +119,77 @@ type Mutation {
   """Обновление записи опыта работы"""
   updateExperience(data: UpdateExperienceInput!): ExperienceEntity!
 
+  """Обновление записи профиля"""
+  updateProfile(data: UpdateProfileInput!): ProfileEntity!
+
   """Обновление записи проекта"""
   updateProject(data: UpdateProjectInput!): ProjectEntity!
+}
+
+"""Сущность профиля"""
+type ProfileEntity {
+  """Дата создания записи"""
+  createdAt: DateTime!
+
+  """Описание"""
+  description: String
+
+  """Опыт работы, связанный с профилем"""
+  experiences: [ExperienceEntity!]!
+
+  """ФИО"""
+  fullName: String!
+
+  """ID записи (UUID v4)"""
+  id: ID!
+
+  """Ссылки на профессиональные ресурсы"""
+  links: [ProfileLinkEntity!]!
+
+  """Проекты, связанные с профилем"""
+  projects: [ProjectEntity!]!
+
+  """Список навыков с указанием уровня"""
+  skills: [ProfileSkillEntity!]!
+
+  """Дата редактирования записи"""
+  updatedAt: DateTime!
+}
+
+"""Сущность профессионального ресурса"""
+type ProfileLinkEntity {
+  """Название ресурса"""
+  platform: String!
+
+  """Ссылка на ресурс"""
+  url: String!
+}
+
+"""Входные данные для профессиональных ресурсов"""
+input ProfileLinkInput {
+  """Название платформы"""
+  platform: String!
+
+  """Ссылка на ресурс"""
+  url: String!
+}
+
+"""Сущность навыка"""
+type ProfileSkillEntity {
+  """Уровень навыка"""
+  level: SkillLevel!
+
+  """Название"""
+  name: String!
+}
+
+"""Входные данные для навыка профиля"""
+input ProfileSkillInput {
+  """Уровень навыка"""
+  level: SkillLevel!
+
+  """Название"""
+  name: String!
 }
 
 """Сущность проекта"""
@@ -157,6 +250,21 @@ type Query {
     offset: Int = 0
   ): [ExperienceEntity!]!
 
+  """Получение профиля по ID записи"""
+  profile(
+    """ID записи (UUID v4)"""
+    id: ID!
+  ): ProfileEntity!
+
+  """Получение всех профилей"""
+  profiles(
+    """Количество записей на страницу"""
+    limit: Int = 10
+
+    """Смещение от начала списка"""
+    offset: Int = 0
+  ): [ProfileEntity!]!
+
   """Получение проекта по ID записи"""
   project(
     """ID записи (UUID v4)"""
@@ -171,6 +279,18 @@ type Query {
     """Смещение от начала списка"""
     offset: Int = 0
   ): [ProjectEntity!]!
+}
+
+"""Уровень навыка"""
+enum SkillLevel {
+  """Базовый"""
+  BASE
+
+  """Средний"""
+  MID
+
+  """Продвинутый"""
+  PRO
 }
 
 """Входные данные для редактирования записи об опыте работы"""
@@ -192,6 +312,24 @@ input UpdateExperienceInput {
 
   """Дата начала работы"""
   startedAt: DateTime
+}
+
+"""Входные данные для редактирования профиля"""
+input UpdateProfileInput {
+  """Описание"""
+  description: String
+
+  """ФИО"""
+  fullName: String
+
+  """ID записи (UUID v4)"""
+  id: ID!
+
+  """Список профессиональных ресурсов"""
+  links: [ProfileLinkInput!]! = []
+
+  """Список навыков"""
+  skills: [ProfileSkillInput!]! = []
 }
 
 """Входные данные для редактирования записи о проекте"""

@@ -15,3 +15,8 @@ export type CreateProfileChildInputKeys<T> = Omit<T, 'id' | AuditFields>
  * Универсальный тип для Update Input DTO любых сущностей
  */
 export type UpdateInputKeys<T> = Partial<Omit<T, AuditFields>>
+
+/**
+ * Для корневых Create Input DTO
+ */
+export type CreateInputKeys<T> = Omit<T, 'id' | AuditFields>;
