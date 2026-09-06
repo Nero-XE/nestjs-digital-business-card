@@ -2,15 +2,13 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 import type { Experience } from '@prisma/client';
+import { ProfileChildBaseInputKeys } from '../../common/types/input-keys.type.js';
 
 @InputType({
   description: 'Базовые входные данные для создания записи об опыте работы',
   isAbstract: true,
 })
-export class ExperienceInput implements Omit<
-  Experience,
-  'id' | 'profileId' | 'createdAt' | 'updatedAt'
-> {
+export class ExperienceInput implements ProfileChildBaseInputKeys<Experience> {
   @Field(() => String, { description: 'Название компании' })
   @IsString()
   @IsNotEmpty()
