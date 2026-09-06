@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ExperienceModule } from './experience/experience.module.js';
+import { ProjectModule } from './project/project.module.js';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ExperienceModule } from './experience/experience.module.js';
     }),
     PrismaModule,
     ExperienceModule,
+    ProjectModule,
   ],
 })
 export class AppModule {}
